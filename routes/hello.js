@@ -35,12 +35,60 @@ router.get('/add', (req, res, next) => {
   res.render('hello/add', data);
 });
 
-//データをデータベースに入れる
+//新規作成のデータをデータベースに入れる
 router.post('/add', (req, res, next) => {
   var nm = req.body.name;
   var ml = req.body.mail;
   var ag = req.body.age;
   db.run('insert into mydata (name, mail, age) values (?, ?, ?)', nm, ml, ag);
+  res.redirect('/hello');
+});
+
+
+//詳細画面
+router.get('/show', (req, res, next) => {
+  var id = req.query.id;
+  db.serialize(() =>{
+    var q = "select * from mydata where id = ?";
+    db.get(q, [id], (err, row) => {
+      if (!err) {
+        var data = {
+          title: 'Hello/show',
+          content: 'id = '+ id + 'のレコード',
+          mydata: row
+        }
+        res.render('hello/show', data);
+      }
+    });
+  });
+});
+
+//編集画面の処理
+router.get('/edit', (req, res, next) => {
+  var id = req.query.id;
+  db.serialize(() => {
+    var q = "select * from mydata where id = ?";
+    db.get(q, [id], (err, row) => {
+      if (!err) {
+        var data = {
+          title: 'Hello/edit',
+          content: 'id = '+ id + 'のレコード',
+          mydata: row
+        }
+        res.render('hello/edit', data);
+      }
+    });
+  });
+});
+
+//編集画面の保存処理
+router.post('/edit', (req, res, next) => {
+  var id = req.body.id;
+  var nm = req.body.name;
+  var ml = req.body.mail;
+  var ag = req.body.age;
+  var q = "update mydata set name = ?, mail = ?, age = ? where id = ?";
+  db.run(q, nm, ml, ag, id);
   res.redirect('/hello');
 });
 

@@ -11,18 +11,24 @@
       <h1><%= title %></h1>
     </header>
     <div role="main">
+      <p><%= content %></p>
       <table>
-        <% for (var i in content) { %>
         <tr>
-          <% var obj = content[i]; %>
-          <th><%= obj.id %></th>
-          <td><%= obj.name %></td>
-          <td><%= obj.mail %></td>
-          <td><%= obj.age %></td>
-          <th><a href="/hello/show?id=<%= obj.id %>">詳細</a></th>
-          <th><a href="/hello/edit?id=<%= obj.id %>">編集</a></th>
+          <th>ID</th>
+          <td><%= mydata.id%></td>
         </tr>
-        <% } %>
+        <tr>
+          <th>NAME</th>
+          <td><%= mydata.name%></td>
+        </tr>
+        <tr>
+          <th>MAIL</th>
+          <td><%= mydata.mail%></td>
+        </tr>
+        <tr>
+          <th>AGE</th>
+          <td><%= mydata.age%></td>
+        </tr>
       </table>
     </div>
   </body>
