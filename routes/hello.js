@@ -20,10 +20,28 @@ router.get('/', function(req, res, next) {
           //取得したデータ
           content: rows
         };
-        res.render('hello', data);
+        res.render('hello/index', data);
       }
     });
   });
+});
+
+//入力画面
+router.get('/add', (req, res, next) => {
+  var data = {
+    title: 'Hello/Add',
+    content: '新しいレコードを入力:'
+  }
+  res.render('hello/add', data);
+});
+
+//データをデータベースに入れる
+router.post('/add', (req, res, next) => {
+  var nm = req.body.name;
+  var ml = req.body.mail;
+  var ag = req.body.age;
+  db.run('insert into mydata (name, mail, age) values (?, ?, ?)', nm, ml, ag);
+  res.redirect('/hello');
 });
 
 module.exports = router;
