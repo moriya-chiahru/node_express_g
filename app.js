@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+//セッションのモジュール読み込み
+var session = require('express-session');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -26,10 +28,22 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+//セッション設定
+var session_opt = {
+  //秘密キー ハッシュの元
+  secret: 'keybord cat',
+  //セッションストア　に保存するかどうか
+  resave: false,
+  //初期化されていない値を強制的に保存するかどうか
+  saveUninitialized: false,
+  //セッションの保存期間
+  cookie: { maxAge: 60 * 60 * 1000 }
+};
+app.use(session(session_opt));
+
 app.use('/', index);
 app.use('/users', users);
 app.use('/hello', hello);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
