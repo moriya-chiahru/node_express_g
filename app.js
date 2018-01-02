@@ -6,10 +6,14 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 //セッションのモジュール読み込み
 var session = require('express-session');
+//jQuery読み込み
+var jquery = require('express-jquery');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var hello = require('./routes/hello');
+//Ajax読み込み
+var ajax = require('./routes/ajax');
 
 
 var app = express();
@@ -26,7 +30,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+//jQuery
+app.use(jquery('/jquery'));
 
 //セッション設定
 var session_opt = {
@@ -44,6 +49,8 @@ app.use(session(session_opt));
 app.use('/', index);
 app.use('/users', users);
 app.use('/hello', hello);
+//Ajax
+app.use('/ajax', ajax);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
