@@ -1,34 +1,27 @@
 var express = require('express');
 var router = express.Router();
 
-//RSS受信モジュール追記
-var http = require('https');
-var parseString = require('xml2js').parseString;
+//SQLliteモジュール追記
+var sqlite3 = require('sqlite3');
 
+//データベースオブジェクトの取得
+var db = new sqlite3.Database('mydb.sqlite3');
 
-/* GET home page. */
+//GETアクセスの処理
 router.get('/', function(req, res, next) {
-  var opt = {
-    host: 'news.google.com',
-    port: 443,
-    path: '/news?hl=ja&ned=us&ie=UTF-8&oe=UTF-8&output=rss'
-  };
-
-  http.get(opt,(rss2) => {
-    var body = '';
-
-    rss2.on('data',(data) => {
-      body += data;
-    });
-
-    rss2.on('end',() => {
-      parseString(body.trim(), (err, result) => {
+  //データベースのシリアライズ
+  db.serialize(() => {
+    //レコードをすべて取り出す
+    db.all("select * from mydata", (err, rows) => {
+      //データベースアクセス完了の処理
+      if(!err) {
         var data = {
           title: 'Hello',
-          content: result.rss.channel[0].item
+          //取得したデータ
+          content: rows
         };
         res.render('hello', data);
-      });
+      }
     });
   });
 });
