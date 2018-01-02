@@ -3,14 +3,22 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  //クエリの取得
-  var name = req.query.name;
-  var mail = req.query.mail;
   //表示
   var data = {
     title: 'Hello!',
-    content: 'あなたの名前は' + name + 'にゃ。<br>' +
-    'メールアドレスは' + mail + 'だにゃ！'
+    content: '※何か書いて送信してください。'
+  };
+  res.render('hello', data);
+});
+
+//ポスト受信
+router.post('/post', function(req, res, next) {
+  //ポスト取得　input name='message'
+  var msg = req.body['message'];
+  //表示
+  var data = {
+    title: 'Hello!',
+    content: 'あなたは' + msg + 'と送信しました。'
   };
   res.render('hello', data);
 });
