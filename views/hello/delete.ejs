@@ -30,7 +30,10 @@
           <td><%= mydata.age%></td>
         </tr>
       </table>
-
+      <form method="post" action="/hello/delete">
+        <input type="hidden" name="id" value="<%= mydata.id%>">
+        <p><input type="submit" value="削除"></p>
+      </form>
     </div>
   </body>
 </html>
